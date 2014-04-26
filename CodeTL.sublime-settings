@@ -1,0 +1,22 @@
+// 
+// 
+// 
+
+{
+
+	// Set to true or false to disable or activate plugin
+	"active": true,
+
+	// Set your username
+	"user": "Albin Hubsch",
+
+	// Time logging folder
+	"CodeTL_folder": "__timelogs",
+
+	// Set your start limit in minutes. You need to be active in x minutes before
+	// the plugin will start log coding time
+	"start": 1,
+
+	// Set your frequency in min. The plugin will stop tracking after x minutes
+	"freq": 10
+}
