@@ -12,6 +12,11 @@
 # Github: 
 # 
 
+
+# 
+# datetime.datetime.now().strftime('%Y-%m-%d')
+# 
+
 __version__ = '0.0.1'
 
 # 
@@ -37,6 +42,16 @@ PLUGIN_DIR = dirname(realpath(__file__))
 SETTINGS_FILE = 'CodeTL.sublime-settings'
 
 SETTINGS = {}
+
+LAST_ACTION = {
+	'time': 0
+}
+
+CURRENT_STREAK_SECTION = {
+	'start': 0,
+	'end': 0,
+	'date': 'not initialised'
+}
 
 # 
 # plugin_loaded
@@ -86,7 +101,7 @@ def createFolderStructure():
 
 
 # 
-def writeToJson(section):
+def writeStreakToJson(section):
 
 	# Prepare data
 	newSection = section
@@ -133,26 +148,38 @@ def ignoreFilter(view):
 		return True
 	return False
 
+
+# 
+# 
+# 
+def checkTime(last, now):
+	global CURRENT_STREAK_SECTION
+	print(CURRENT_STREAK_SECTION['date'])
+
 # 
 # CodeTL
 # Description goes here
 # 
 class CodeTL(sublime_plugin.EventListener):
 
+	# 
+	# 
+	# 
 	def on_post_save(self, view):
-		# print('Herrrororrororooooo')
-		global PLUGIN_DIR
-		# print(getProjectName())
-		# 
-		# writeToJson()
 		
 		print(ignoreFilter(view))
-		
-		# print(getProjectDir())
 
+		checkTime(0, 0)
+
+	# 
+	# 
+	# 
 	def on_activated(self, view):
 		createFolderStructure()
 
+	# 
+	# 
+	# 
 	def on_modified_async(self, view):
 		self.lastCheck = time.time()
 		# print(self.lastCheck)
