@@ -3,6 +3,9 @@
 # 
 # CodeTL automatically logs all your coding hours in Sublime
 # 
+# This plugin is developed for Sublime Text 3. And will probably
+# not work properly under this version.
+# 
 # version: 0.0.1
 # 
 # Author: Albin Hubsch - albin.hubsch@gmail.com
@@ -27,7 +30,7 @@ from os.path import expanduser, dirname, realpath, join
 # 
 # CONSTANTS
 # 
-ST_VERSION = int(sublime.version())
+# ST_VERSION = int(sublime.version())
 
 PLUGIN_DIR = dirname(realpath(__file__))
 
@@ -63,7 +66,7 @@ def getProjectDir():
 
 	return project_dir
 
-# 
+# Get the logging dir + user folder
 def getLoggingDir():
 	return getProjectDir()+'/'+SETTINGS.get('CodeTL_folder')+'/'+SETTINGS.get('user')
 
@@ -119,6 +122,17 @@ def writeToJson(section):
 def writeToConclusion():
 	pass
 
+
+# 
+# ignoreFilter
+# Function returns true if the file in the current view contains anything
+# within the filter rules, false if no match
+# 
+def ignoreFilter(view):
+	if any(x in view.file_name() for x in SETTINGS.get('ignore')):
+		return True
+	return False
+
 # 
 # CodeTL
 # Description goes here
@@ -131,6 +145,8 @@ class CodeTL(sublime_plugin.EventListener):
 		# print(getProjectName())
 		# 
 		# writeToJson()
+		
+		print(ignoreFilter(view))
 		
 		# print(getProjectDir())
 
