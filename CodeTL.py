@@ -20,6 +20,8 @@ import os
 import sys
 import time
 import threading
+import json
+import datetime
 from os.path import expanduser, dirname, realpath, join
 
 # 
@@ -40,26 +42,82 @@ def plugin_loaded():
 	global SETTINGS
 	SETTINGS = sublime.load_settings(SETTINGS_FILE)
 
+
 # Get the project name
 def getProjectName():
 	window = sublime.active_window()
 	projectName = window.project_file_name()
 	return projectName.split(os.sep)[-1].replace('.sublime-project', '')
 
+def getCurrentView():
+	pass
+
+
 # Get the project directory to create the logging folder
 def getProjectDir():
 	window = sublime.active_window()
 	try:
 		project_dir = window.project_data()['folders'][0]['path']
-	except Exception as err:
-		raise err
-	
+	except Exception as e:
+		raise e
+
 	return project_dir
 
-# Prepare folder for logging
-def createTimeLoggingFolder(dir):
-	if not os.path.exists(dir+'/'+SETTINGS.get('CodeTL_folder')):
-		os.makedirs(dir+'/'+SETTINGS.get('CodeTL_folder'))
+# 
+def getLoggingDir():
+	return getProjectDir()+'/'+SETTINGS.get('CodeTL_folder')+'/'+SETTINGS.get('user')
+
+
+# Prepare folders for logging
+def createFolderStructure():
+	# Try create the user folder
+	try:
+		if not os.path.exists(getLoggingDir()):
+			os.makedirs(getLoggingDir())
+			# Create logging file
+			f = open(getLoggingDir()+'/timelog.json', 'w')
+			f.write('[]')
+			f.close()
+	except Exception as e:
+		pass
+
+
+# 
+def writeToJson(section):
+
+	# Prepare data
+	newSection = section
+	
+	try:
+		# Open timelog file
+		f = open(getLoggingDir()+'/timelog.json', 'r+')
+
+		# Load json and time sections
+		sections = json.load(f)
+
+		# Append sections with the new section
+		sections.append(newSection)
+
+		# Reset file pointer and write to file, first 
+		# one use in deploy mode, second one for debug mode
+		f.seek(0)
+		# f.write(json.dumps(x))
+		json.dump(sections, f, indent=4)
+
+	except ValueError as ve:
+		print(ve)
+
+	except Exception as e:
+		print('e: ', e)
+		raise e
+
+	# Close file
+	f.close()
+
+
+# 
+def writeToConclusion():
+	pass
 
 # 
 # CodeTL
@@ -68,19 +126,21 @@ def createTimeLoggingFolder(dir):
 class CodeTL(sublime_plugin.EventListener):
 
 	def on_post_save(self, view):
-		print('Herrrororrororooooo')
+		# print('Herrrororrororooooo')
 		global PLUGIN_DIR
-		print(getProjectName())
+		# print(getProjectName())
+		# 
+		# writeToJson()
 		
-		print(getProjectDir())
+		# print(getProjectDir())
 
 	def on_activated(self, view):
-		print('\n')
-		print(getProjectName())
+		createFolderStructure()
 
-		# createTimeLoggingFolder(getProjectDir())
-
-	def on_modified(self, view):
-		pass
+	def on_modified_async(self, view):
+		self.lastCheck = time.time()
+		# print(self.lastCheck)
+		# createFolderStructure()
+		
 		# Check if file exists
 			# if not create dir and file

@@ -1,5 +1,5 @@
 // 
-// 
+// CodeTL Settings
 // 
 
 {
@@ -13,10 +13,13 @@
 	// Time logging folder
 	"CodeTL_folder": "__timelogs",
 
+	// paths to files that should be ignored by the logging
+	"ignore":["temp", "etc", "var"],
+
 	// Set your start limit in minutes. You need to be active in x minutes before
 	// the plugin will start log coding time
-	"start": 1,
+	"active_treshold": 1,
 
 	// Set your frequency in min. The plugin will stop tracking after x minutes
-	"freq": 10
+	"inactive_treshold": 10,
 }
