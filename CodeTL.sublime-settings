@@ -8,7 +8,7 @@
 	"active": true,
 
 	// Set your username, your logs will be saved in this folder
-	"user": "Albin Hubsch",
+	"user": "my_timeLogs",
 
 	// Time logging folder
 	"CodeTL_folder": "__timelogs",
@@ -16,10 +16,13 @@
 	// Paths or files that should be ignored
 	"ignore":["temp/", "etc/", "var/", "__timelogs/"],
 
-	// Set your start limit in minutes. You need to be active in x minutes before
-	// the plugin will start log coding time
-	"active_treshold": 1,
+	// Set your desired refresh rate. This is how often the plugin should write to your
+	// json file. The refresh rate is in minutes.
+	// Default: 2min
+	"refresh_rate": 2,
 
-	// Set your frequency in min. The plugin will stop tracking after x minutes
-	"inactive_treshold": 10,
+	// Set your streak treshold in min. The plugin will start a new coding streak if
+	// you've been innactive for this amount of minutes.
+	// Default: 10min
+	"streak_treshold": 10,
 }
