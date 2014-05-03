@@ -18,8 +18,8 @@
 
 	// Set your desired refresh rate. This is how often the plugin should write to your
 	// json file. The refresh rate is in minutes.
-	// Default: 2min
-	"refresh_rate": 2,
+	// Default: 1min
+	"refresh_rate": 1,
 
 	// Set your streak treshold in min. The plugin will start a new coding streak if
 	// you've been innactive for this amount of minutes.

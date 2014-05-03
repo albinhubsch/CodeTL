@@ -12,13 +12,13 @@
 # The plugin supprts multiple users, just make sure you use a unique username
 # in the plugins settingsfile
 # 
-# version: 1.0.0
+# version: 1.0.1
 # 
 # Author: Albin Hubsch - albin.hubsch@gmail.com
 # Github: https://github.com/albinhubsch/CodeTL.git
 # 
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 # 
 # IMPORTS
@@ -44,7 +44,8 @@ SETTINGS_FILE = 'CodeTL.sublime-settings'
 SETTINGS = {}
 
 LAST_ACTION = {
-	'time': time.time()
+	'time': time.time(),
+	'project': ''
 }
 
 CURRENT_STREAK = {
@@ -77,7 +78,7 @@ def getProjectDir():
 	try:
 		project_dir = window.project_data()['folders'][0]['path']
 	except Exception as e:
-		raise e
+		return ''
 
 	return project_dir
 
@@ -153,8 +154,7 @@ def saveCurrentStreak():
 			refreshStreak()
 			sections[-1] = CURRENT_STREAK
 		else:
-			CURRENT_STREAK['start'] = 0
-			refreshStreak()
+			resetStreak()
 			sections.append(CURRENT_STREAK)
 
 	except IndexError as e:
@@ -170,10 +170,12 @@ def saveCurrentStreak():
 # within the filter rules, false if no match
 # 
 def ignoreFilter(view):
-	if any(x in view.file_name() for x in SETTINGS.get('ignore')):
+	try:
+		if any(x in view.file_name() for x in SETTINGS.get('ignore')):
+			return True
+		return False
+	except Exception:
 		return True
-	return False
-
 
 # 
 # Method that updates the current streak and calculates the duration
@@ -191,6 +193,14 @@ def refreshStreak():
 	h, m = divmod(m, 60)
 	CURRENT_STREAK['duration'] = '%d:%02d:%02d' % (h, m, s)
 
+# 
+# Reset streak
+# 
+def resetStreak():
+	global CURRENT_STREAK
+	CURRENT_STREAK['start'] = 0
+	refreshStreak()
+
 
 # 
 # Function that check if still in streak mode or time to break and 
@@ -206,6 +216,18 @@ def updateStreak():
 		LAST_ACTION['time'] = time.time()
 	else:
 		refreshStreak()
+
+	print(CURRENT_STREAK)
+
+#
+# Check project that is in use, IF project change reset streak
+#
+def updateActionProject():
+	global CURRENT_STREAK
+	if LAST_ACTION['project'] != getProjectDir():
+		resetStreak()
+		
+	LAST_ACTION['project'] = getProjectDir()
 
 
 # 
@@ -226,4 +248,5 @@ class CodeTL(sublime_plugin.EventListener):
 	def on_modified_async(self, view):
 
 		if not ignoreFilter(view) and SETTINGS.get('active'):
+			updateActionProject()
 			updateStreak()
