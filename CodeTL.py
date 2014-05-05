@@ -12,13 +12,13 @@
 # The plugin supprts multiple users, just make sure you use a unique username
 # in the plugins settingsfile
 # 
-# version: 1.0.1
+# version: 1.0.2
 # 
 # Author: Albin Hubsch - albin.hubsch@gmail.com
 # Github: https://github.com/albinhubsch/CodeTL.git
 # 
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 # 
 # IMPORTS

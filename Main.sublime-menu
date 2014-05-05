@@ -1,0 +1,32 @@
+[
+    {
+        "caption": "Preferences",
+        "mnemonic": "n",
+        "id": "preferences",
+        "children":
+        [
+            {
+                "caption": "CodeTL",
+                "mnemonic": "W",
+                "id": "codetl-settings",
+                "children":
+                [
+                    {
+                        "command": "open_file", "args":
+                        {
+                            "file": "${packages}/CodeTL/CodeTL.sublime-settings"
+                        },
+                        "caption": "Settings – Default"
+                    },
+                    // {
+                    //     "command": "open_file", "args":
+                    //     {
+                    //         "file": "${packages}/User/CodeTL.sublime-settings"
+                    //     },
+                    //     "caption": "Settings – User"
+                    // }
+                ]
+            }
+        ]
+    }
+]
